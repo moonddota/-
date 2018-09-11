@@ -1,6 +1,8 @@
 package com.paypassword;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,14 +10,22 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2018/3/19.
  */
 
+@SuppressLint("AppCompatCustomView")
 public class PayPasswordView extends EditText {
 
     //画笔
@@ -49,6 +59,33 @@ public class PayPasswordView extends EditText {
         setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
         //不显示光标
         setCursorVisible(false);
+
+
+        this.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                Log.e("tag",actionId+"");
+
+                //回车键
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    Log.e("tag","huiche ");
+                }
+                return true;
+            }
+        });
+
+        this.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.e("tag",keyCode  +"  ");
+                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     public void initAttributeSet(Context context, AttributeSet attrs){
@@ -147,6 +184,14 @@ public class PayPasswordView extends EditText {
     }
 
     public void addPassword(String number){
+
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(number);
+        Log.e("tag",isNum.matches() +"");
+        if( !isNum.matches() ){
+            return ;
+        }
+
         number = getText().toString().trim() + number;
         if (number.length() > mPasswordNum) {
             return;
@@ -182,4 +227,6 @@ public class PayPasswordView extends EditText {
     public interface  PayEndListener{
         void doEnd(String password);
     }
+
+
 }
