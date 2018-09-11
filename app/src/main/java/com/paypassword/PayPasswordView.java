@@ -82,7 +82,7 @@ public class PayPasswordView extends EditText {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int passwordWidth=getWidth()-(mPasswordNum-1)*mDivisionLineSize;
+        int passwordWidth=getWidth()-(mPasswordNum-1)*mDivisionLineSize-mBgSize*2;
         mPasswordItemWidth=passwordWidth/mPasswordNum;
         //绘制背景；
         drawbg(canvas);
@@ -103,7 +103,7 @@ public class PayPasswordView extends EditText {
         //设置画笔为实心
         paint.setStyle(Paint.Style.FILL);
         for (int i=0;i<passwordLength;i++){
-            int cx=i+mDivisionLineSize+i*mPasswordItemWidth+ mPasswordItemWidth / 2 + mBgSize;
+            int cx=i*mDivisionLineSize+i*mPasswordItemWidth+ mPasswordItemWidth / 2 + mBgSize;
 
             canvas.drawCircle(cx,getHeight()/2,mPasswordRadius,paint);
         }
@@ -166,6 +166,9 @@ public class PayPasswordView extends EditText {
         setText(currentText);
     }
 
+    public void clear(){
+        setText("");
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

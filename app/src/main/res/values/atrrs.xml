@@ -10,7 +10,7 @@
         <!-- 分割线的颜色 -->
         <attr name="divisionLineColor" format="color" />
         <!-- 分割线的大小 -->
-        <attr name="divisionLineSize" format="color" />
+        <attr name="divisionLineSize" format="dimension" />
         <!-- 背景边框的颜色 -->
         <attr name="bgColor" format="color" />
         <!-- 背景边框的大小 -->

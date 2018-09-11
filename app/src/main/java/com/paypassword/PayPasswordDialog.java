@@ -29,6 +29,7 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
     private TextView tv9;
     private TextView tv;
     private TextView tvDel;
+    private TextView clear;
 
     public PayPasswordDialog(Context context, int themeResId) {
         super(context, themeResId);
@@ -85,6 +86,7 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
         tv7.setOnClickListener(this);
         tv8.setOnClickListener(this);
         tv9.setOnClickListener(this);
+        clear.setOnClickListener(this);
 
     }
 
@@ -102,6 +104,7 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
         tv9 = (TextView) findViewById(R.id.tv9);
         tv = (TextView) findViewById(R.id.tv);
         tvDel = (TextView) findViewById(R.id.tv_del);
+        clear = (TextView) findViewById(R.id.clear);
     }
 
     DialogClick dialogClick;
@@ -141,6 +144,9 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.tv9:
                 payPassword.addPassword("9");
+                break;
+            case R.id.clear:
+                payPassword.clear();
                 break;
         }
     }
