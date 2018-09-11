@@ -33,7 +33,7 @@ public class PayPasswordView extends EditText {
     //每个密码所占的宽度
     int mPasswordItemWidth;
     //密码位数
-    int mPasswordNum=6;
+    int mPasswordNum = 6;
     //背景色
     int mBgColor = Color.parseColor("#d1d2d6");
     // 背景边框大小
@@ -65,11 +65,11 @@ public class PayPasswordView extends EditText {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                Log.e("tag",actionId+"");
+                Log.e("tag", actionId + "");
 
                 //回车键
-                if(actionId == EditorInfo.IME_ACTION_DONE){
-                    Log.e("tag","huiche ");
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    Log.e("tag", "huiche ");
                 }
                 return true;
             }
@@ -78,7 +78,7 @@ public class PayPasswordView extends EditText {
         this.setOnKeyListener(new OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e("tag",keyCode  +"  ");
+                Log.e("tag", keyCode + "  ");
                 if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
                     return true;
                 }
@@ -88,26 +88,27 @@ public class PayPasswordView extends EditText {
 
     }
 
-    public void initAttributeSet(Context context, AttributeSet attrs){
-        TypedArray array=context.obtainStyledAttributes(attrs,R.styleable.PayPasswordView);
+    public void initAttributeSet(Context context, AttributeSet attrs) {
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.PayPasswordView);
         mPasswordRadius = (int) array.getDimension(R.styleable.PayPasswordView_passwordRadius, dip2px(mPasswordRadius));
-        mBgCorner= (int) array.getDimension(R.styleable.PayPasswordView_bgCorner,dip2px(mBgCorner));
-        mBgSize= (int) array.getDimension(R.styleable.PayPasswordView_bgSize,dip2px(mBgSize));
-        mBgColor=array.getColor(R.styleable.PayPasswordView_bgColor,mBgColor);
-        mPasswordNum=array.getInt(R.styleable.PayPasswordView_passwordNumber,6);
-        mDivisionLineSize= (int) array.getDimension(R.styleable.PayPasswordView_divisionLineSize,dip2px(mDivisionLineSize));
+        mBgCorner = (int) array.getDimension(R.styleable.PayPasswordView_bgCorner, dip2px(mBgCorner));
+        mBgSize = (int) array.getDimension(R.styleable.PayPasswordView_bgSize, dip2px(mBgSize));
+        mBgColor = array.getColor(R.styleable.PayPasswordView_bgColor, mBgColor);
+        mPasswordNum = array.getInt(R.styleable.PayPasswordView_passwordNumber, 6);
+        mDivisionLineSize = (int) array.getDimension(R.styleable.PayPasswordView_divisionLineSize, dip2px(mDivisionLineSize));
         mDivisionLineColor = array.getColor(R.styleable.PayPasswordView_divisionLineColor, mDivisionLineColor);
         mPasswordColor = array.getColor(R.styleable.PayPasswordView_passwordColor, mDivisionLineColor);
         array.recycle();
     }
 
     //初始化画笔
-    public void initPaint(){
-        paint=new Paint();
+    public void initPaint() {
+        paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
 
     }
+
     /**
      * dip 转 px
      */
@@ -119,8 +120,8 @@ public class PayPasswordView extends EditText {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int passwordWidth=getWidth()-(mPasswordNum-1)*mDivisionLineSize-mBgSize*2;
-        mPasswordItemWidth=passwordWidth/mPasswordNum;
+        int passwordWidth = getWidth() - (mPasswordNum - 1) * mDivisionLineSize - mBgSize * 2;
+        mPasswordItemWidth = passwordWidth / mPasswordNum;
         //绘制背景；
         drawbg(canvas);
         //绘制分割线
@@ -132,21 +133,38 @@ public class PayPasswordView extends EditText {
 
     /**
      * 绘制密码
+     *
      * @param canvas
      */
     private void drawHidePassword(Canvas canvas) {
-        int passwordLength=getText().length();
+        int passwordLength = getText().length();
+
+       String str = getText().toString();
+        int length = str.length();
+        for (int i = 0; i <length; i++) {
+            if (!Character.isDigit(str.charAt(i))) {
+                if (i == 0){
+                    setText("");
+                }else {
+                    str = str.substring(0,i);
+                    setText(str);
+                }
+                return ;
+            }
+        }
+
         paint.setColor(mPasswordColor);
         //设置画笔为实心
         paint.setStyle(Paint.Style.FILL);
-        for (int i=0;i<passwordLength;i++){
-            int cx=i*mDivisionLineSize+i*mPasswordItemWidth+ mPasswordItemWidth / 2 + mBgSize;
-
-            canvas.drawCircle(cx,getHeight()/2,mPasswordRadius,paint);
+        for (int i = 0; i < passwordLength; i++) {
+            int cx = i * mDivisionLineSize + i * mPasswordItemWidth + mPasswordItemWidth / 2 + mBgSize;
+            canvas.drawCircle(cx, getHeight() / 2, mPasswordRadius, paint);
         }
 
-        if (passwordLength>=mPasswordNum){
-            if (payEndListener!=null){
+        setSelection(getText().toString().length());
+
+        if (passwordLength >= mPasswordNum) {
+            if (payEndListener != null) {
                 payEndListener.doEnd(getText().toString().trim());
             }
         }
@@ -157,14 +175,15 @@ public class PayPasswordView extends EditText {
     private void drawDivisionLine(Canvas canvas) {
         paint.setColor(mDivisionLineColor);
         paint.setStrokeWidth(mDivisionLineSize);
-        for (int i=0;i<mPasswordNum-1;i++){
-            int startX=(i + 1) * mDivisionLineSize + (i + 1) * mPasswordItemWidth + mBgSize;
-            canvas.drawLine(startX,mBgSize,startX, getHeight() - mBgSize, paint);
+        for (int i = 0; i < mPasswordNum - 1; i++) {
+            int startX = (i + 1) * mDivisionLineSize + (i + 1) * mPasswordItemWidth + mBgSize;
+            canvas.drawLine(startX, mBgSize, startX, getHeight() - mBgSize, paint);
         }
     }
 
     /**
      * 绘制背景
+     *
      * @param canvas
      */
     private void drawbg(Canvas canvas) {
@@ -172,7 +191,7 @@ public class PayPasswordView extends EditText {
         //设置画笔为空心
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(mBgSize);
-        RectF rectF=new RectF(mBgSize,mBgSize, getWidth() - mBgSize, getHeight() - mBgSize);
+        RectF rectF = new RectF(mBgSize, mBgSize, getWidth() - mBgSize, getHeight() - mBgSize);
         // 如果没有设置圆角，就画矩形
         if (mBgCorner == 0) {
             canvas.drawRect(rectF, paint);
@@ -183,13 +202,12 @@ public class PayPasswordView extends EditText {
 
     }
 
-    public void addPassword(String number){
+    public void addPassword(String number) {
 
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(number);
-        Log.e("tag",isNum.matches() +"");
-        if( !isNum.matches() ){
-            return ;
+        if (!isNum.matches()) {
+            return;
         }
 
         number = getText().toString().trim() + number;
@@ -202,16 +220,16 @@ public class PayPasswordView extends EditText {
     /**
      * 删除最后一位密码
      */
-    public void delLastPassword(){
-        String currentText=getText().toString().trim();
-        if (TextUtils.isEmpty(currentText)){
+    public void delLastPassword() {
+        String currentText = getText().toString().trim();
+        if (TextUtils.isEmpty(currentText)) {
             return;
         }
-        currentText=currentText.substring(0,currentText.length()-1);
+        currentText = currentText.substring(0, currentText.length() - 1);
         setText(currentText);
     }
 
-    public void clear(){
+    public void clear() {
         setText("");
     }
 
@@ -220,11 +238,11 @@ public class PayPasswordView extends EditText {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public void setPayPasswordEndListener(PayEndListener payEndListener){
-        this.payEndListener=payEndListener;
+    public void setPayPasswordEndListener(PayEndListener payEndListener) {
+        this.payEndListener = payEndListener;
     }
 
-    public interface  PayEndListener{
+    public interface PayEndListener {
         void doEnd(String password);
     }
 

@@ -49,7 +49,7 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
 
         Window window = getWindow();
         WindowManager.LayoutParams mParams = window.getAttributes();
-        mParams.width= WindowManager.LayoutParams.MATCH_PARENT;
+        mParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         window.setGravity(Gravity.BOTTOM);
         window.setAttributes(mParams);
         setCanceledOnTouchOutside(true);
@@ -62,16 +62,10 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
             }
         });
 
-        tvDel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                payPassword.delLastPassword();
-            }
-        });
         payPassword.setPayPasswordEndListener(new PayPasswordView.PayEndListener() {
             @Override
             public void doEnd(String password) {
-                if (dialogClick!=null){
+                if (dialogClick != null) {
                     dialogClick.doConfirm(password);
                 }
             }
@@ -87,6 +81,7 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
         tv8.setOnClickListener(this);
         tv9.setOnClickListener(this);
         clear.setOnClickListener(this);
+        tvDel.setOnClickListener(this);
 
     }
 
@@ -108,13 +103,14 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
     }
 
     DialogClick dialogClick;
-    public void setDialogClick(DialogClick dialogClick){
-        this.dialogClick=dialogClick;
+
+    public void setDialogClick(DialogClick dialogClick) {
+        this.dialogClick = dialogClick;
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.tv:
                 payPassword.addPassword("0");
                 break;
@@ -148,10 +144,13 @@ public class PayPasswordDialog extends Dialog implements View.OnClickListener {
             case R.id.clear:
                 payPassword.clear();
                 break;
+            case R.id.tv_del:
+                payPassword.delLastPassword();
+                break;
         }
     }
 
-    public interface DialogClick{
+    public interface DialogClick {
         void doConfirm(String password);
     }
 
