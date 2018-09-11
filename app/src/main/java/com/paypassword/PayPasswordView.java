@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -60,31 +61,7 @@ public class PayPasswordView extends EditText {
         //不显示光标
         setCursorVisible(false);
 
-
-        this.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                Log.e("tag", actionId + "");
-
-                //回车键
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    Log.e("tag", "huiche ");
-                }
-                return true;
-            }
-        });
-
-        this.setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e("tag", keyCode + "  ");
-                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    return true;
-                }
-                return false;
-            }
-        });
+        setInputType(InputType.TYPE_NULL);
 
     }
 
